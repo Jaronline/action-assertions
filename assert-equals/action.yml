@@ -1,0 +1,25 @@
+inputs:
+  expected:
+    description: The expected value to compare against.
+    required: true
+  actual:
+    description: The actual value to compare.
+    required: true
+  message:
+    description: An optional message to display on failure.
+    type: string
+    default: ""
+
+name: Assert Equals
+description: Asserts that two values are equal to each other. Fails the job if they are not.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      id: assert
+      run: |
+        chmod +x "$GITHUB_ACTION_PATH/assert-equals"
+        INPUT_EXPECTED="${{ inputs.expected }}" \
+          INPUT_ACTUAL="${{ inputs.actual }}" \
+          INPUT_MESSAGE="${{ inputs.message }}" \
+          "$GITHUB_ACTION_PATH/assert-equals"

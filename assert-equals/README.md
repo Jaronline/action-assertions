@@ -1,8 +1,3 @@
-# GitHub Actions for Assertions
-
-This repository contains a collection of GitHub Actions designed to assert various conditions in your workflows.
-These actions can be used to validate outputs<!--, check file existence, compare values, and more-->.
-
 ## Assert Equals
 
 The `assert-equals` action checks if two values are equal and fails the workflow if they are not.

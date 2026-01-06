@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+FAILS=0
+SCRIPT="./assert-equals"
+
+run_test() {
+  local name="$1"
+  local input_expected="$2"
+  local input_actual="$3"
+  local input_message="$4"
+  local expected="$5"
+  local expected_exit_code="$6"
+
+  actual=$(INPUT_EXPECTED="$input_expected" \
+    INPUT_ACTUAL="$input_actual" \
+    INPUT_MESSAGE="$input_message" \
+    "$SCRIPT")
+  exit_code=$?
+
+  echo "Test $name:"
+
+  if [[ "$actual" == "$expected" && "$exit_code" == "$expected_exit_code" ]]; then
+    echo "✅ Test passed"
+  else
+    echo "❌ Test failed"
+    echo "Expected: '$expected' (exit code $expected_exit_code)"
+    echo "Got:      '$actual' (exit code $exit_code)"
+    FAILS=$((FAILS + 1))
+  fi
+
+  echo
+}
+
+#
+# Assertion passes
+#
+run_test "assertion passes without message" \
+  "hello" \
+  "hello" \
+  "" \
+  "" \
+  0
+
+run_test "assertion passes with message" \
+  "world" \
+  "world" \
+  "Values should be equal" \
+  "" \
+  0
+
+#
+# Assertion fails
+#
+run_test "assertion fails without message" \
+  "foo" \
+  "bar" \
+  "" \
+  "❌ Assertion Failed:
+Expected: foo
+Actual: bar" \
+  1
+
+run_test "assertion fails with message" \
+  "foo" \
+  "baz" \
+  "Expected foo but got baz" \
+  "❌ Assertion Failed: Expected foo but got baz
+Expected: foo
+Actual: baz" \
+  1
