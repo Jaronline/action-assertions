@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assert Equal
-        uses: jaronline/action-assertions/assert-equals@main
+        uses: jaronline/action-assertions/assert-equals@v1
         with:
             expected: 'hello'
             actual: 'hello'
