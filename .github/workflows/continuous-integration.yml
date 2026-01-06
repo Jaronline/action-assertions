@@ -1,0 +1,39 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  get-bash-tests:
+    name: Get Bash Tests
+    runs-on: ubuntu-latest
+    outputs:
+      test-files: ${{ steps.set-outputs.outputs.test-files }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: 'test'
+      - name: Find Bash Test Files
+        id: set-outputs
+        run: |
+          test_files=$(find . -type f -exec grep -Il '^#!.*\bbash\b' {} + | jq -R -s -c 'split("\n")[:-1]')
+          echo "test-files=$test_files" >> $GITHUB_OUTPUT
+
+  bash-tests:
+    name: Run Bash Tests
+    needs: get-bash-tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-file: ${{ fromJson(needs.get-bash-tests.outputs.test-files) }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Run Bash Test
+        run: bash "${{ matrix.test-file }}"
