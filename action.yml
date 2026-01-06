@@ -1,0 +1,10 @@
+name: Actions Assertions
+description: A collection of GitHub actions that allow you to do assertions in other GitHub actions or workflows.
+
+runs:
+  using: composite
+  steps:
+    - run: |
+        echo "::error::The path 'jaronline/actions-assertions' is not a valid action. Please see the README of the 'jaronline/actions-assertions' repository for more information on how to use these actions."
+        exit 1
+      shell: bash
