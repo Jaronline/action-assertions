@@ -8,3 +8,7 @@ runs:
         echo "::error::The path 'jaronline/actions-assertions' is not a valid action. Please see the README of the 'jaronline/actions-assertions' repository for more information on how to use these actions."
         exit 1
       shell: bash
+
+branding:
+  icon: 'check-circle'
+  color: 'green'
