@@ -2,7 +2,9 @@
 set -uo pipefail
 
 FAILS=0
-SCRIPT="./assert-equals"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+ROOT_DIR=$(dirname "$SCRIPT_DIR")
+SCRIPT="$ROOT_DIR/assert-equals/assert-equals"
 
 run_test() {
   local name="$1"
