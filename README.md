@@ -36,6 +36,7 @@ If the file does not exist, or the path is a directory, the action fails the wor
 
 ```yml
 name: Test
+
 on:
   push:
 
