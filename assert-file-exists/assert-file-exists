@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+run_assertion() {
+  local path="$1"
+  local message="$2"
+
+  if [[ ! -f "$path" ]]; then
+    if [[ -z "$message" ]]; then
+      echo "❌ Assertion Failed:"
+    else
+      echo "❌ Assertion Failed: $message"
+    fi
+    echo "Expected file to exist at path: $path"
+    if [[ -d "$path" ]]; then
+      echo "Found a directory at that path instead."
+	fi
+	exit 1
+  fi
+
+  exit 0
+}
+
+run_assertion "$INPUT_PATH" "$INPUT_MESSAGE"

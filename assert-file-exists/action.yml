@@ -1,0 +1,21 @@
+inputs:
+  path:
+    description: The file path to check for existence.
+    required: true
+  message:
+    description: An optional message to display on failure.
+    type: string
+    default: ""
+
+name: Assert File Exists
+description: Asserts that a specified file exists. Fails the job if it does not.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      id: assert
+      run: |
+        chmod +x "$GITHUB_ACTION_PATH/assert-file-exists"
+        INPUT_PATH="${{ inputs.path }}" \
+          INPUT_MESSAGE="${{ inputs.message }}" \
+          "$GITHUB_ACTION_PATH/assert-file-exists"
