@@ -14,8 +14,8 @@ run_test() {
   local expected_exit_code="$5"
 
   actual=$(INPUT_PATH="$input_path" \
-  	INPUT_MESSAGE="$input_message" \
-  	"$SCRIPT")
+    INPUT_MESSAGE="$input_message" \
+    "$SCRIPT")
   exit_code=$?
 
   echo "Test $name:"

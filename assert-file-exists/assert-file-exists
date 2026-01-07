@@ -14,8 +14,8 @@ run_assertion() {
     echo "Expected file to exist at path: $path"
     if [[ -d "$path" ]]; then
       echo "Found a directory at that path instead."
-	fi
-	exit 1
+    fi
+    exit 1
   fi
 
   exit 0
