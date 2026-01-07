@@ -55,3 +55,46 @@ jobs:
             exit 65
           fi
           echo "✅ All bash tests passed"
+
+  get-workflow-tests:
+    name: Get Workflow Tests
+    runs-on: ubuntu-latest
+    outputs:
+      test-files: ${{ steps.set-outputs.outputs.test-files }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: '.github/workflows/test'
+      - name: Find Workflow Test Files
+        id: set-outputs
+        run: |
+          test_files=$(find . -type f \( -name "*.yml" -o -name "*.yaml" \))
+          echo "test-files=$test_files" >> $GITHUB_OUTPUT
+
+  workflow-tests:
+    name: Run Workflow Tests
+    needs: get-workflow-tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-file: ${{ fromJSON(needs.get-workflow-tests.outputs.test-files) }}
+    uses: jaronline/action-assertions/${{ matrix.test-file }}@${{ github.ref }}
+
+  workflow-tests-summary:
+    name: Workflow Tests Summary
+    needs: workflow-tests
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check Workflow Tests Result
+        run: |
+          result="${{ needs.workflow-tests.result }}"
+          if [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
+            echo "❌ One or more bash test jobs failed or were cancelled"
+            exit 64
+          elif [ "$result" = "skipped" ]; then
+            echo "⚠️ All bash test jobs were skipped"
+            exit 65
+          fi
+          echo "✅ All bash tests passed"
