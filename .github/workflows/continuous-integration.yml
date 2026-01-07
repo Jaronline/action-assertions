@@ -37,3 +37,21 @@ jobs:
         uses: actions/checkout@v6
       - name: Run Bash Test
         run: bash "${{ matrix.test-file }}"
+
+  bash-tests-summary:
+    name: Bash Tests Summary
+    needs: bash-tests
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check Bash Tests Result
+        run: |
+          result="${{ needs.bash-tests.result }}"
+          if [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
+            echo "❌ One or more bash test jobs failed or were cancelled"
+            exit 64
+          elif [ "$result" = "skipped" ]; then
+            echo "⚠️ All bash test jobs were skipped"
+            exit 65
+          fi
+          echo "✅ All bash tests passed"
