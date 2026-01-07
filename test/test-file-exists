@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+FAILS=0
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+ROOT_DIR=$(dirname "$SCRIPT_DIR")
+SCRIPT="$ROOT_DIR/assert-file-exists/assert-file-exists"
+
+run_test() {
+  local name="$1"
+  local input_path="$2"
+  local input_message="$3"
+  local expected="$4"
+  local expected_exit_code="$5"
+
+  actual=$(INPUT_PATH="$input_path" \
+    INPUT_MESSAGE="$input_message" \
+    "$SCRIPT")
+  exit_code=$?
+
+  echo "Test $name:"
+
+  if [[ "$actual" == "$expected" && "$exit_code" == "$expected_exit_code" ]]; then
+    echo "✅ Test passed"
+  else
+    echo "❌ Test failed"
+    echo "Expected: '$expected' (exit code $expected_exit_code)"
+    echo "Got:      '$actual' (exit code $exit_code)"
+    FAILS=$((FAILS + 1))
+  fi
+
+  echo
+}
+
+#
+# Before all
+#
+
+tmpFile=$(mktemp -p "$SCRIPT_DIR" file-XXXXXX)
+
+#
+# Assertion passes
+#
+
+run_test "assertion passes for correct file path and message" \
+  "$tmpFile" \
+  "File should exist" \
+  "" \
+  0
+
+run_test "assertion passes for correct file path and no message" \
+  "$tmpFile" \
+  "" \
+  "" \
+  0
+
+#
+# Assertion fails
+#
+
+run_test "assertion fails for incorrect file path and message" \
+  "$SCRIPT_DIR/file.txt" \
+  "file not found" \
+  "❌ Assertion Failed: file not found
+Expected file to exist at path: $SCRIPT_DIR/file.txt" \
+  1
+
+run_test "assertion fails for incorrect file path and no message" \
+  "$SCRIPT_DIR/file.txt" \
+  "" \
+  "❌ Assertion Failed:
+Expected file to exist at path: $SCRIPT_DIR/file.txt" \
+  1
+
+run_test "assertion fails for incorrect directory path and message" \
+  "$SCRIPT_DIR" \
+  "file not found" \
+  "❌ Assertion Failed: file not found
+Expected file to exist at path: $SCRIPT_DIR
+Found a directory at that path instead." \
+  1
+
+run_test "assertion fails for incorrect directory path and no message" \
+  "$SCRIPT_DIR" \
+  "" \
+  "❌ Assertion Failed:
+Expected file to exist at path: $SCRIPT_DIR
+Found a directory at that path instead." \
+  1
+
+#
+# After all
+#
+
+rm "$tmpFile"
