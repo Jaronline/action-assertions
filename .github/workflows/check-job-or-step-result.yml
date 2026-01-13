@@ -1,0 +1,29 @@
+name: Check Job or Step Result
+on:
+  workflow_call:
+    inputs:
+      result:
+        description: The result of the job or step to check
+        required: true
+        type: string
+
+jobs:
+  check-result:
+    name: Check Job or Step Result
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Result
+        run: |
+          result="${{ inputs.result }}"
+          if [ "$result" = "failure" ] || [ "$result" = "cancelled" ]; then
+            echo "❌ One or more jobs failed or were cancelled"
+            exit 64
+          elif [ "$result" = "skipped" ]; then
+            echo "⚠️ All jobs were skipped"
+            exit 65
+          elif [ "$result" != "success" ]; then
+            echo "❌ Invalid job result"
+            exit 66
+          else
+            echo "✅ All jobs passed"
+          fi
