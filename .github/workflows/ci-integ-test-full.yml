@@ -1,0 +1,24 @@
+name: CI integration test full
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: integ-test
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  integ-tests:
+    uses: ./.github/workflows/suite-integ-test.yml
+    concurrency:
+      group: CI-integ-test-full
+      cancel-in-progress: false
+    with:
+      runner-os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
+    secrets: inherit

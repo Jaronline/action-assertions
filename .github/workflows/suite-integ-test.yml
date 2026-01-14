@@ -1,0 +1,22 @@
+name: suite-integ-test
+
+on:
+  workflow_call:
+    inputs:
+      runner-os:
+        type: string
+        default: '["ubuntu-latest"]'
+
+permissions:
+  contents: read
+
+jobs:
+  assert-file-exists:
+    uses: ./.github/workflows/integ-test-file-exists.yml
+    with:
+      runner-os: ${{ inputs.runner-os }}
+
+  assert-equals:
+    uses: ./.github/workflows/integ-test-equals.yml
+    with:
+      runner-os: ${{ inputs.runner-os }}
