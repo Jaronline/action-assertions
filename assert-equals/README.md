@@ -17,7 +17,7 @@ jobs:
       - name: Assert Equal
         uses: jaronline/action-assertions/assert-equals@v1
         with:
-            expected: 'hello'
-            actual: 'hello'
+            expected: 'main'
+            actual: ${{ github.ref_name }}
             message: 'Values are not equal!' # Optional
 ```
