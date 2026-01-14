@@ -1,0 +1,25 @@
+inputs:
+  unexpected:
+    description: The unexpected value to compare against.
+    required: true
+  actual:
+    description: The actual value to compare.
+    required: true
+  message:
+    description: An optional message to display on failure.
+    type: string
+    default: ""
+
+name: Assert Not Equals
+description: Asserts that two values are not equal to each other. Fails the job if they are.
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      id: assert
+      run: |
+        chmod +x "$GITHUB_ACTION_PATH/assert-not-equals"
+        INPUT_UNEXPECTED="${{ inputs.unexpected }}" \
+          INPUT_ACTUAL="${{ inputs.actual }}" \
+          INPUT_MESSAGE="${{ inputs.message }}" \
+          "$GITHUB_ACTION_PATH/assert-not-equals"

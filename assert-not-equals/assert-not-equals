@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+run_assertion() {
+  local unexpected="$1"
+  local actual="$2"
+  local message="$3"
+
+  if [[ "$unexpected" == "$actual" ]]; then
+    if [[ -z "$message" ]]; then
+      echo "❌ Assertion Failed:"
+    else
+      echo "❌ Assertion Failed: $message"
+    fi
+    echo -e "Expected values not to equal:"
+    echo -e "Value: $unexpected"
+    exit 1
+  fi
+
+  exit 0
+}
+
+run_assertion "$INPUT_UNEXPECTED" "$INPUT_ACTUAL" "$INPUT_MESSAGE"

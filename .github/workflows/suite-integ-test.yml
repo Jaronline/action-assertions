@@ -20,3 +20,9 @@ jobs:
     uses: ./.github/workflows/integ-test-equals.yml
     with:
       runner-os: ${{ inputs.runner-os }}
+
+  assert-not-equals:
+    uses: ./.github/workflows/integ-test-not-equals.yml
+    with:
+      runner-os: ${{ inputs.runner-os }}
+
