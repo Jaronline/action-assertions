@@ -1,0 +1,146 @@
+name: Test Assert Equals
+on:
+  workflow_call:
+    inputs:
+      runner-os:
+        type: string
+        default: '["ubuntu-latest"]'
+
+jobs:
+  test-two-values-equal-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+        value:
+          - expected: 'hello'
+            actual: 'hello'
+          - expected: 'world!'
+            actual: 'world!'
+          - expected: true
+            actual: true
+          - expected: false
+            actual: 'false'
+          - expected: 0
+            actual: '0'
+          - expected: 3.3
+            actual: 3.3
+    name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }}, message='Values are not equal' WHEN assert-equals THEN job is successful"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-equals
+        with:
+          expected: ${{ matrix.value.expected }}
+          actual: ${{ matrix.value.actual }}
+          message: Values are not equal
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-two-values-equal-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+        value:
+          - expected: 'hello'
+            actual: 'hello'
+          - expected: 'world!'
+            actual: 'world!'
+          - expected: true
+            actual: true
+          - expected: false
+            actual: 'false'
+          - expected: 0
+            actual: '0'
+          - expected: 3.3
+            actual: 3.3
+    name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }} WHEN assert-equals THEN job is successful"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-equals
+        with:
+          expected: ${{ matrix.value.expected }}
+          actual: ${{ matrix.value.actual }}
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-two-values-not-equal-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+        value:
+          - expected: 'hello'
+            actual: 'world!'
+          - expected: true
+            actual: false
+          - expected: false
+            actual: 'true'
+          - expected: 0
+            actual: 3
+          - expected: 3.3
+            actual: 5.3
+    name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }}, message='Values are not equal' WHEN assert-equals THEN job failure"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-equals
+        with:
+          expected: ${{ matrix.value.expected }}
+          actual: ${{ matrix.value.actual }}
+          message: Values are not equal
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-two-values-not-equal-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+        value:
+          - expected: 'hello'
+            actual: 'world!'
+          - expected: true
+            actual: false
+          - expected: false
+            actual: 'true'
+          - expected: 0
+            actual: 3
+          - expected: 3.3
+            actual: 5.3
+    name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }} WHEN assert-equals THEN job failure"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-equals
+        with:
+          expected: ${{ matrix.value.expected }}
+          actual: ${{ matrix.value.actual }}
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
