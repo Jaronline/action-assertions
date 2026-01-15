@@ -4,7 +4,7 @@ set -uo pipefail
 FAILS=0
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 ROOT_DIR=$(dirname "$SCRIPT_DIR")
-SCRIPT="$ROOT_DIR/assert-file-not-exists/assert-file-not-exists"
+SCRIPT="$ROOT_DIR/assert-path-not-exists/assert-path-not-exists"
 
 run_test() {
   local name="$1"
