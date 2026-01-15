@@ -1,7 +1,9 @@
 # GitHub Actions for Assertions
 
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/Jaronline/action-assertions?label=openssf+scorecard&style=flat)](https://scorecard.dev/viewer/?uri=github.com/Jaronline/action-assertions)
+
 This repository contains a collection of GitHub Actions designed to assert various conditions in your workflows.
-These actions can be used to validate outputs<!--, check file existence, compare values, and more-->.
+These actions can be used to validate outputs, check file existence, and compare values<!--, and more-->.
 
 ## Assert Equals
 
