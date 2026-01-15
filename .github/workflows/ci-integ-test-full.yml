@@ -19,6 +19,9 @@ jobs:
     concurrency:
       group: CI-integ-test-full
       cancel-in-progress: false
+    permissions:
+      contents: read
+      pull-requests: read
     with:
       runner-os: '["ubuntu-latest", "windows-latest", "macos-latest"]'
       detect-changes: false
