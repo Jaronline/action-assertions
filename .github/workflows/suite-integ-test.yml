@@ -22,7 +22,7 @@ jobs:
       pull-requests: read
     outputs:
       path-exists: ${{ steps.filter.outputs.assert-path-exists }}
-      file-not-exists: ${{ steps.filter.outputs.assert-file-not-exists }}
+      path-not-exists: ${{ steps.filter.outputs.assert-path-not-exists }}
       equals: ${{ steps.filter.outputs.assert-equals }}
       not-equals: ${{ steps.filter.outputs.assert-not-equals }}
     steps:
@@ -36,9 +36,9 @@ jobs:
             assert-path-exists:
               - 'assert-path-exists/**'
               - '.github/workflows/integ-test-path-exists.yml'
-            assert-file-not-exists:
-              - 'assert-file-not-exists/**'
-              - '.github/workflows/integ-test-file-not-exists.yml'
+            assert-path-not-exists:
+              - 'assert-path-not-exists/**'
+              - '.github/workflows/integ-test-path-not-exists.yml'
             assert-equals:
               - 'assert-equals/**'
               - '.github/workflows/integ-test-equals.yml'
@@ -53,10 +53,10 @@ jobs:
     with:
       runner-os: ${{ inputs.runner-os }}
 
-  assert-file-not-exists:
+  assert-path-not-exists:
     needs: detect-changes
-    if: ${{ always() && (!inputs.detect-changes || needs.detect-changes.outputs.file-not-exists == 'true') }}
-    uses: ./.github/workflows/integ-test-file-not-exists.yml
+    if: ${{ always() && (!inputs.detect-changes || needs.detect-changes.outputs.path-not-exists == 'true') }}
+    uses: ./.github/workflows/integ-test-path-not-exists.yml
     with:
       runner-os: ${{ inputs.runner-os }}
 

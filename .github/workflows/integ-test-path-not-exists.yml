@@ -1,4 +1,4 @@
-name: Test Assert File Not Exists
+name: Test Assert Path Not Exists
 on:
   workflow_call:
     inputs:
@@ -31,12 +31,12 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  test-non-existent-file-path-with-message:
+  test-non-existent-path-with-message:
     strategy:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN non-existent file path, message='file should not exist' WHEN assert-file-not-exists THEN job is success"
+    name: "GIVEN non-existent path, message='path should not exist' WHEN assert-path-not-exists THEN job is success"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -44,22 +44,22 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-not-exists
+        uses: ./assert-path-not-exists
         with:
-          path: non-existent-file
-          message: file should not exist
+          path: non-existent-path
+          message: path should not exist
       - name: Assert step success
         uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
 
-  test-non-existent-file-path-without-message:
+  test-non-existent-path-without-message:
     strategy:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN non-existent file path WHEN assert-file-not-exists THEN job is success"
+    name: "GIVEN non-existent path WHEN assert-path-not-exists THEN job is success"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -67,21 +67,21 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-not-exists
+        uses: ./assert-path-not-exists
         with:
-          path: non-existent-file
+          path: non-existent-path
       - name: Assert step success
         uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
 
-  test-existing-file-path-with-message:
+  test-existing-path-with-message:
     strategy:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN existing file path, message='file should not exist' WHEN assert-file-not-exists THEN job is failure"
+    name: "GIVEN existing path, message='path should not exist' WHEN assert-path-not-exists THEN job is failure"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -93,22 +93,22 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-not-exists
+        uses: ./assert-path-not-exists
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
-          message: file should not exist
+          message: path should not exist
       - name: Assert step failure
         uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
 
-  test-existing-file-path-without-message:
+  test-existing-path-without-message:
     strategy:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN existing file path WHEN assert-file-not-exists THEN job is failure"
+    name: "GIVEN existing path WHEN assert-path-not-exists THEN job is failure"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -120,7 +120,7 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-not-exists
+        uses: ./assert-path-not-exists
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
       - name: Assert step failure
