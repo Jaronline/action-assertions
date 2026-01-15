@@ -5,16 +5,13 @@ run_assertion() {
   local path="$1"
   local message="$2"
 
-  if [[ ! -f "$path" ]]; then
+  if [[ ! -e "$path" ]]; then
     if [[ -z "$message" ]]; then
       echo "❌ Assertion Failed:"
     else
       echo "❌ Assertion Failed: $message"
     fi
     echo "Expected file to exist at path: $path"
-    if [[ -d "$path" ]]; then
-      echo "Found a directory at that path instead."
-    fi
     exit 1
   fi
 
