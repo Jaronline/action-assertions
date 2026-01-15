@@ -16,7 +16,7 @@ jobs:
     outputs:
       existing-file-path: ${{ steps.create-temp-file.outputs.existing-file-path }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Create Temp File
         id: create-temp-file
         run: |
@@ -24,7 +24,7 @@ jobs:
           echo "This is a test file." > "$temp_file"
           echo "existing-file-path=$temp_file" >> $GITHUB_OUTPUT
       - name: Create Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           path: ${{ steps.create-temp-file.outputs.existing-file-path }}
           name: temp-file
@@ -40,9 +40,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Download Temp File
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: temp-file
       - name: Act
@@ -53,7 +53,7 @@ jobs:
           path: ${{ needs.before-all.outputs.existing-file-path }}
           message: file not found
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -67,9 +67,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Download Temp File
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: temp-file
       - name: Act
@@ -79,7 +79,7 @@ jobs:
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -93,7 +93,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -102,7 +102,7 @@ jobs:
           path: non-existent-file
           message: file not found
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -116,7 +116,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -124,7 +124,7 @@ jobs:
         with:
           path: non-existent-file
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}

@@ -31,7 +31,7 @@ jobs:
     name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }}, message='Values are not equal' WHEN assert-equals THEN job is successful"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -41,7 +41,7 @@ jobs:
           actual: ${{ matrix.value.actual }}
           message: Values are not equal
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -67,7 +67,7 @@ jobs:
     name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }} WHEN assert-equals THEN job is successful"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -76,7 +76,7 @@ jobs:
           expected: ${{ matrix.value.expected }}
           actual: ${{ matrix.value.actual }}
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -100,7 +100,7 @@ jobs:
     name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }}, message='Values are not equal' WHEN assert-equals THEN job failure"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -110,7 +110,7 @@ jobs:
           actual: ${{ matrix.value.actual }}
           message: Values are not equal
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -134,7 +134,7 @@ jobs:
     name: "GIVEN expected=${{ matrix.value.expected }}, actual=${{ matrix.value.actual }} WHEN assert-equals THEN job failure"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Act
         id: act
         continue-on-error: true
@@ -143,7 +143,7 @@ jobs:
           expected: ${{ matrix.value.expected }}
           actual: ${{ matrix.value.actual }}
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@v1
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
