@@ -3,9 +3,21 @@ name: CI Bash Test
 on:
   workflow_dispatch:
   pull_request:
+    paths:
+      - 'test/**'
+      - 'assert-equals/**'
+      - 'assert-file-exists/**'
+      - 'assert-not-equals/**'
+      - '.github/workflows/ci-bash-test.yml'
   push:
-      branches:
-          - main
+    branches:
+      - main
+    paths:
+      - 'test/**'
+      - 'assert-equals/**'
+      - 'assert-file-exists/**'
+      - 'assert-not-equals/**'
+      - '.github/workflows/ci-bash-test.yml'
 
 permissions:
   contents: read
