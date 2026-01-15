@@ -51,10 +51,10 @@ jobs:
             message: 'Values should not be equal!' # Optional
 ```
 
-## Assert File Exists
+## Assert Path Exists
 
-The `assert-file-exists` action checks if a specified file exists in the repository.
-If the file does not exist, or the path is a directory, the action fails the workflow.
+The `assert-path-exists` action checks if a specified path exists in the repository.
+If the path does not exist, the action fails the workflow.
 
 ### Example Usage
 
@@ -68,11 +68,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Assert File Exists
-        uses: jaronline/action-assertions/assert-file-exists@v1
+      - name: Assert Path Exists
+        uses: jaronline/action-assertions/assert-path-exists@v1
         with:
             path: 'path/to/your/file.txt'
-            message: 'File does not exist!' # Optional
+            message: 'Path does not exist!' # Optional
 ```
 
 ## Assert File Not Exists

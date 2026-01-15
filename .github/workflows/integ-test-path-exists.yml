@@ -1,4 +1,4 @@
-name: Test Assert File Exists
+name: Test Assert Path Exists
 on:
   workflow_call:
     inputs:
@@ -48,7 +48,7 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-exists
+        uses: ./assert-path-exists
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
           message: file not found
@@ -75,7 +75,7 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-exists
+        uses: ./assert-path-exists
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
       - name: Assert step success
@@ -97,7 +97,7 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-exists
+        uses: ./assert-path-exists
         with:
           path: non-existent-file
           message: file not found
@@ -120,7 +120,7 @@ jobs:
       - name: Act
         id: act
         continue-on-error: true
-        uses: ./assert-file-exists
+        uses: ./assert-path-exists
         with:
           path: non-existent-file
       - name: Assert step failure
