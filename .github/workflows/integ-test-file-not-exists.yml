@@ -1,0 +1,130 @@
+name: Test Assert File Not Exists
+on:
+  workflow_call:
+    inputs:
+      runner-os:
+        type: string
+        default: '["ubuntu-latest"]'
+
+permissions:
+  contents: read
+
+jobs:
+  before-all:
+    name: Before All
+    runs-on: ubuntu-latest
+    outputs:
+      existing-file-path: ${{ steps.create-temp-file.outputs.existing-file-path }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Create Temp File
+        id: create-temp-file
+        run: |
+          temp_file=$(mktemp test-file-XXXX.txt)
+          echo "This is a test file." > "$temp_file"
+          echo "existing-file-path=$temp_file" >> $GITHUB_OUTPUT
+      - name: Create Artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          path: ${{ steps.create-temp-file.outputs.existing-file-path }}
+          name: temp-file
+          if-no-files-found: error
+          retention-days: 1
+
+  test-non-existent-file-path-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent file path, message='file should not exist' WHEN assert-file-not-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-file-not-exists
+        with:
+          path: non-existent-file
+          message: file should not exist
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-non-existent-file-path-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent file path WHEN assert-file-not-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-file-not-exists
+        with:
+          path: non-existent-file
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-existing-file-path-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing file path, message='file should not exist' WHEN assert-file-not-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Download Temp File
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: temp-file
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-file-not-exists
+        with:
+          path: ${{ needs.before-all.outputs.existing-file-path }}
+          message: file should not exist
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-existing-file-path-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing file path WHEN assert-file-not-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Download Temp File
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: temp-file
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-file-not-exists
+        with:
+          path: ${{ needs.before-all.outputs.existing-file-path }}
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}

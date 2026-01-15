@@ -7,6 +7,7 @@ on:
       - 'test/**'
       - 'assert-equals/**'
       - 'assert-file-exists/**'
+      - 'assert-file-not-exists/**'
       - 'assert-not-equals/**'
       - '.github/workflows/ci-bash-test.yml'
   push:
@@ -16,6 +17,7 @@ on:
       - 'test/**'
       - 'assert-equals/**'
       - 'assert-file-exists/**'
+      - 'assert-file-not-exists/**'
       - 'assert-not-equals/**'
       - '.github/workflows/ci-bash-test.yml'
 
