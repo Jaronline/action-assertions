@@ -27,9 +27,10 @@ jobs:
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           path: ${{ steps.create-temp-file.outputs.existing-file-path }}
-          name: temp-file
+          name: temp-file-path-not-exists
           if-no-files-found: error
           retention-days: 1
+          overwrite: true
 
   test-non-existent-path-with-message:
     strategy:
@@ -89,7 +90,7 @@ jobs:
       - name: Download Temp File
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
-          name: temp-file
+          name: temp-file-path-not-exists
       - name: Act
         id: act
         continue-on-error: true
@@ -116,7 +117,7 @@ jobs:
       - name: Download Temp File
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
-          name: temp-file
+          name: temp-file-path-not-exists
       - name: Act
         id: act
         continue-on-error: true
