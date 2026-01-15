@@ -18,6 +18,9 @@ jobs:
   integ-tests:
     name: Integration Tests
     uses: ./.github/workflows/suite-integ-test.yml
+    permissions:
+      contents: read
+      pull-requests: read
     secrets: inherit
 
   integ-tests-summary:

@@ -6,23 +6,59 @@ on:
       runner-os:
         type: string
         default: '["ubuntu-latest"]'
+      detect-changes:
+        type: boolean
+        default: true
 
 permissions:
   contents: read
 
 jobs:
+  detect-changes:
+    if: inputs.detect-changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      file-exists: ${{ steps.filter.outputs.assert-file-exists }}
+      equals: ${{ steps.filter.outputs.assert-equals }}
+      not-equals: ${{ steps.filter.outputs.assert-not-equals }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            assert-file-exists:
+              - 'assert-file-exists/**'
+              - '.github/workflows/integ-test-file-exists.yml'
+            assert-equals:
+              - 'assert-equals/**'
+              - '.github/workflows/integ-test-equals.yml'
+            assert-not-equals:
+              - 'assert-not-equals/**'
+              - '.github/workflows/integ-test-not-equals.yml'
+
   assert-file-exists:
+    needs: detect-changes
+    if: ${{ always() && (!inputs.detect-changes || needs.detect-changes.outputs.file-exists == 'true') }}
     uses: ./.github/workflows/integ-test-file-exists.yml
     with:
       runner-os: ${{ inputs.runner-os }}
 
   assert-equals:
+    needs: detect-changes
+    if: ${{ always() && (!inputs.detect-changes || needs.detect-changes.outputs.equals == 'true') }}
     uses: ./.github/workflows/integ-test-equals.yml
     with:
       runner-os: ${{ inputs.runner-os }}
 
   assert-not-equals:
+    needs: detect-changes
+    if: ${{ always() && (!inputs.detect-changes || needs.detect-changes.outputs.not-equals == 'true') }}
     uses: ./.github/workflows/integ-test-not-equals.yml
     with:
       runner-os: ${{ inputs.runner-os }}
-
