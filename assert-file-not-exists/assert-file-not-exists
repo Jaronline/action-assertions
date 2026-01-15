@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+fail() {
+  local message="$1"
+  local details="$2"
+
+  if [[ -z "$message" ]]; then
+    echo "❌ Assertion Failed:"
+  else
+    echo "❌ Assertion Failed: $message"
+  fi
+
+  if [[ -n "$details" ]]; then
+    echo "$details"
+  fi
+
+  exit 1
+}
+
+run_assertion() {
+  local path="$1"
+  local message="$2"
+
+  if [[ -e "$path" ]]; then
+    fail "$message" "Expected nothing to exist at path: $path"
+  fi
+
+  exit 0
+}
+
+run_assertion "$INPUT_PATH" "$INPUT_MESSAGE"
