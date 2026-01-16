@@ -13,13 +13,5 @@ inputs:
 name: Assert Not Equals
 description: Asserts that two values are not equal to each other. Fails the job if they are.
 runs:
-  using: composite
-  steps:
-    - shell: bash
-      id: assert
-      run: |
-        chmod +x "$GITHUB_ACTION_PATH/assert-not-equals"
-        INPUT_UNEXPECTED="${{ inputs.unexpected }}" \
-          INPUT_ACTUAL="${{ inputs.actual }}" \
-          INPUT_MESSAGE="${{ inputs.message }}" \
-          "$GITHUB_ACTION_PATH/assert-not-equals"
+  using: node24
+  main: '../dist/assert-not-equals/main/index.js'

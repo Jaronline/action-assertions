@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'dist/**'
 
 concurrency:
   group: integ-test
@@ -15,8 +17,17 @@ permissions:
   contents: read
 
 jobs:
+  build-distribution:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Build and upload distribution artifact
+        uses: ./.github/actions/build-dist
+
   integ-tests:
     name: Integration Tests
+    needs: build-distribution
     uses: ./.github/workflows/suite-integ-test.yml
     permissions:
       contents: read

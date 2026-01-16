@@ -10,12 +10,5 @@ inputs:
 name: Assert Path Not Exists
 description: Asserts that a specified path does not exist. Fails the job if it does.
 runs:
-  using: composite
-  steps:
-    - shell: bash
-      id: assert
-      run: |
-        chmod +x "$GITHUB_ACTION_PATH/assert-path-not-exists"
-        INPUT_PATH="${{ inputs.path }}" \
-          INPUT_MESSAGE="${{ inputs.message }}" \
-          "$GITHUB_ACTION_PATH/assert-path-not-exists"
+  using: node24
+  main: '../dist/assert-path-not-exists/main/index.js'

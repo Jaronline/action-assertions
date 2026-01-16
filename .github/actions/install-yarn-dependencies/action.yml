@@ -1,0 +1,29 @@
+name: Install Yarn dependencies
+description: Install project dependencies using Yarn.
+
+inputs:
+  working-directory:
+    description: 'The working directory to run yarn install in.'
+    required: false
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - name: Enable corepack
+      shell: bash
+      run: corepack enable
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: 'yarn'
+        cache-dependency-path: '${{ inputs.working-directory }}/yarn.lock'
+    - name: Check yarn version
+      shell: bash
+      run: |
+        yarn -v
+        node -v
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --immutable
+      working-directory: ${{ inputs.working-directory }}

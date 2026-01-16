@@ -1,0 +1,53 @@
+{
+  "name": "action-assertions",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint src test --ext ts --fix -c eslint.config.mjs",
+    "check": "eslint src test --ext ts -c eslint.config.mjs",
+    "format": "prettier --ignore-path=.prettierignore --write \"{src,test}/**/*.{mjs,ts,js}\"",
+    "test": "vitest run",
+    "compile:assert-equals:main": "ncc build src/actions/assert-equals/main.ts --out dist/assert-equals/main --source-map --no-source-map-register",
+    "compile:assert-not-equals:main": "ncc build src/actions/assert-not-equals/main.ts --out dist/assert-not-equals/main --source-map --no-source-map-register",
+    "compile:assert-path-exists:main": "ncc build src/actions/assert-path-exists/main.ts --out dist/assert-path-exists/main --source-map --no-source-map-register",
+    "compile:assert-path-not-exists:main": "ncc build src/actions/assert-path-not-exists/main.ts --out dist/assert-path-not-exists/main --source-map --no-source-map-register",
+    "compile": "run-p 'compile:*:*'",
+    "build": "yarn lint && yarn compile",
+    "all": "yarn build && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaronline/action-assertions.git"
+  },
+  "keywords": [
+    "github",
+    "actions",
+    "github-actions",
+    "assert",
+    "assertions",
+    "testing"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "@actions/core": "^2.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^25.0.9",
+    "@vercel/ncc": "^0.38.4",
+    "@vitest/coverage-v8": "4.0.17",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.0.0",
+    "npm-run-all2": "^8.0.4",
+    "prettier": "^3.8.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.0",
+    "vitest": "^4.0.17"
+  },
+  "packageManager": "yarn@4.12.0"
+}

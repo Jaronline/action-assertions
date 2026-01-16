@@ -36,6 +36,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true
@@ -76,6 +78,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true
@@ -111,6 +115,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true
@@ -147,6 +153,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true
