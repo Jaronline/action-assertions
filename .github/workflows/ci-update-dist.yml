@@ -1,0 +1,50 @@
+name: CI Update Dist
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'dist/**'
+
+permissions:
+  contents: read
+
+jobs:
+  update-dist:
+    if: github.repository == 'jaronline/action-assertions'
+    permissions:
+      id-token: write
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create App Token
+        uses: actions/create-github-app-token@v2
+        id: create-token
+        with:
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.create-token.outputs.token }}
+      - name: Install dependencies
+        uses: ./.github/actions/install-yarn-dependencies
+        with:
+          working-directory: 'sources'
+      - name: Build distribution
+        run: |
+          yarn check
+          yarn compile
+        working-directory: 'sources'
+      - name: Copy generated sources/dist directory to top-level dist
+        shell: bash
+        run: |
+          cp -r sources/dist .
+      - name: Commit Changes and Push
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_user_name: jaronline-ci[bot]
+          commit_user_email: 228008421+jaronline-ci[bot]@users.noreply.github.com
+          commit_message: 'chore: update dist [bot]'
+          file_pattern: dist

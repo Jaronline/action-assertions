@@ -6,10 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'assert-equals/assert-equals'
-      - 'assert-file-exists/assert-file-exists'
-      - 'assert-file-not-exists/assert-file-not-exists'
-      - 'assert-not-equals/assert-not-equals'
+      - 'dist/**'
 
 concurrency:
   group: integ-test

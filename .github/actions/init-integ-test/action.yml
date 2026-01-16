@@ -1,0 +1,12 @@
+name: Initialize Integration Test
+description: Sets up the environment for running integration tests.
+
+runs:
+  using: composite
+  steps:
+    - name: Download dist
+      if: ${{ env.SKIP_DIST != 'true' && !env.ACT }}
+      uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+      with:
+        name: dist
+        path: dist/

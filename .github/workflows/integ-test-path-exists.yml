@@ -17,6 +17,8 @@ jobs:
       existing-file-path: ${{ steps.create-temp-file.outputs.existing-file-path }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Create Temp File
         id: create-temp-file
         run: |
@@ -42,6 +44,8 @@ jobs:
     needs: before-all
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Download Temp File
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -69,6 +73,8 @@ jobs:
     needs: before-all
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Download Temp File
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
@@ -95,6 +101,8 @@ jobs:
     needs: before-all
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true
@@ -118,6 +126,8 @@ jobs:
     needs: before-all
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
       - name: Act
         id: act
         continue-on-error: true

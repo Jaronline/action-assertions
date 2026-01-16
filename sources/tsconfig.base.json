@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "incremental": false,
+        "target": "es2022",
+        "module": "commonjs",
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "esModuleInterop": true
+    }
+}

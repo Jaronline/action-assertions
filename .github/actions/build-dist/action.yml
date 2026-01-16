@@ -1,0 +1,23 @@
+name: Build and upload distribution
+description: Build the distribution files and upload them as artifacts.
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      uses: ./.github/actions/install-yarn-dependencies
+      with:
+        working-directory: sources
+    - name: Build distribution
+      shell: bash
+      run: yarn build
+      working-directory: sources
+    - name: Copy generated sources/dist directory to top-level dist
+      shell: bash
+      run: |
+        cp -r sources/dist .
+    - name: Upload distribution artifact
+      uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+      with:
+        name: dist
+        path: dist/
