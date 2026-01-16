@@ -34,6 +34,7 @@ jobs:
       pull-requests: read
     with:
       detect-changes: ${{ github.event_name == 'pull_request' }}
+      skip-dist: false
     secrets: inherit
 
   integ-tests-summary:

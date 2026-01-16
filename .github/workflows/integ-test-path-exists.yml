@@ -5,6 +5,12 @@ on:
       runner-os:
         type: string
         default: '["ubuntu-latest"]'
+      skip-dist:
+        type: boolean
+        default: false
+
+env:
+  SKIP_DIST: ${{ inputs.skip-dist }}
 
 permissions:
   contents: read

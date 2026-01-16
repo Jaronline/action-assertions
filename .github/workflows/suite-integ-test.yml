@@ -9,6 +9,9 @@ on:
       detect-changes:
         type: boolean
         default: true
+      skip-dist:
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -52,6 +55,7 @@ jobs:
     uses: ./.github/workflows/integ-test-path-exists.yml
     with:
       runner-os: ${{ inputs.runner-os }}
+      skip-dist: ${{ inputs.skip-dist }}
 
   assert-path-not-exists:
     needs: detect-changes
@@ -59,6 +63,7 @@ jobs:
     uses: ./.github/workflows/integ-test-path-not-exists.yml
     with:
       runner-os: ${{ inputs.runner-os }}
+      skip-dist: ${{ inputs.skip-dist }}
 
   assert-equals:
     needs: detect-changes
@@ -66,6 +71,7 @@ jobs:
     uses: ./.github/workflows/integ-test-equals.yml
     with:
       runner-os: ${{ inputs.runner-os }}
+      skip-dist: ${{ inputs.skip-dist }}
 
   assert-not-equals:
     needs: detect-changes
@@ -73,3 +79,4 @@ jobs:
     uses: ./.github/workflows/integ-test-not-equals.yml
     with:
       runner-os: ${{ inputs.runner-os }}
+      skip-dist: ${{ inputs.skip-dist }}
