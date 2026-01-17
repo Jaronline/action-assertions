@@ -1,42 +1,66 @@
+import { dirname } from "node:path";
 import { assertPathNotExists } from "../src/assertions";
 import { AssertPathNotExistsError } from "../src/errors/assert-path-not-exists";
-import { mktemp, rmtemp } from "./paths";
+import { MatchMethod } from "../src/paths/match-method";
+import { makeTempDir, makeTempFile, removeTemp } from "./paths";
 
 describe("Assert Path Not Exists Tests", () => {
 	const emptyMessageConfig = {
 		message: () => "",
 	};
-	let tmp: { file: string; dir: string } = { file: "", dir: "" };
+	let tmp: { file: string; dir: string };
+	let tmpEmptyDir: string;
 
 	beforeAll(async () => {
-		tmp = await mktemp();
+		tmp = await makeTempFile();
+		tmpEmptyDir = await makeTempDir();
 	});
 
-	it("GIVEN non-existent path WHEN assertPathNotExists is called THEN does not throw", () => {
+	it.each<[() => string, MatchMethod]>([
+		[() => "/non/existent/path", MatchMethod.EXACT],
+		[() => "/non/existent/*", MatchMethod.GLOB],
+		[() => `${tmpEmptyDir}/*`, MatchMethod.GLOB],
+	])("GIVEN path=%s, matchMethod=%s WHEN assertPathNotExists is called THEN does not throw", (path, matchMethod) => {
 		const pathConfig = {
-			path: () => "/non/existent/path",
+			path,
+			matchMethod: () => matchMethod,
 		};
 
 		expect(() => assertPathNotExists(pathConfig, emptyMessageConfig)).not.toThrow();
 	});
 
-	it("GIVEN non-existent path AND message='Path should not exist' WHEN assertPathNotExists is called THEN does not throw", () => {
-		const pathConfig = {
-			path: () => "/non/existent/path",
-		};
-
-		const messageConfig = {
-			message: () => "Path should not exist",
-		};
-
-		expect(() => assertPathNotExists(pathConfig, messageConfig)).not.toThrow();
-	});
-
-	it.each([() => tmp.file, () => tmp.dir])(
-		"GIVEN existing path WHEN assertPathNotExists is called THEN throws AssertPathNotExistsError",
-		async path => {
+	it.each<[() => string, MatchMethod]>([
+		[() => "/non/existent/path", MatchMethod.EXACT],
+		[() => "/non/existent/*", MatchMethod.GLOB],
+		[() => `${tmpEmptyDir}/*`, MatchMethod.GLOB],
+	])(
+		"GIVEN path=%s, matchMethod=%s AND message='Path should not exist' WHEN assertPathNotExists is called THEN does not throw",
+		(path, matchMethod) => {
 			const pathConfig = {
 				path,
+				matchMethod: () => matchMethod,
+			};
+
+			const messageConfig = {
+				message: () => "Path should not exist",
+			};
+
+			expect(() => assertPathNotExists(pathConfig, messageConfig)).not.toThrow();
+		}
+	);
+
+	it.each<[() => string, MatchMethod]>([
+		[() => tmp.file, MatchMethod.EXACT],
+		[() => tmp.dir, MatchMethod.EXACT],
+		[() => `${tmp.dir}/*`, MatchMethod.GLOB],
+		[() => `${dirname(tmp.dir)}/*`, MatchMethod.GLOB],
+		[() => `${dirname(tmp.dir)}/**/*`, MatchMethod.GLOB],
+	])(
+		"GIVEN existing path WHEN assertPathNotExists is called THEN throws AssertPathNotExistsError",
+		async (path, matchMethod) => {
+			const pathConfig = {
+				path,
+				matchMethod: () => matchMethod,
 			};
 
 			await expect(() => assertPathNotExists(pathConfig, emptyMessageConfig)).rejects.toThrowError(
@@ -45,11 +69,18 @@ describe("Assert Path Not Exists Tests", () => {
 		}
 	);
 
-	it.each([() => tmp.file, () => tmp.dir])(
+	it.each<[() => string, MatchMethod]>([
+		[() => tmp.file, MatchMethod.EXACT],
+		[() => tmp.dir, MatchMethod.EXACT],
+		[() => `${tmp.dir}/*`, MatchMethod.GLOB],
+		[() => `${dirname(tmp.dir)}/*`, MatchMethod.GLOB],
+		[() => `${dirname(tmp.dir)}/**/*`, MatchMethod.GLOB],
+	])(
 		"GIVEN existing path AND message='Path should not exist' WHEN assertPathNotExists is called THEN throws AssertPathNotExistsError with custom message",
-		async path => {
+		async (path, matchMethod) => {
 			const pathConfig = {
 				path,
+				matchMethod: () => matchMethod,
 			};
 
 			const messageConfig = {
@@ -63,6 +94,7 @@ describe("Assert Path Not Exists Tests", () => {
 	);
 
 	afterAll(async () => {
-		await rmtemp(tmp.dir);
+		await removeTemp(tmp.dir);
+		await removeTemp(tmpEmptyDir);
 	});
 });

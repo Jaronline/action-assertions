@@ -89,6 +89,57 @@ jobs:
           expected: success
           actual: ${{ steps.act.outcome }}
 
+  test-non-existent-glob-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent glob, message='path should not exist' WHEN assert-path-not-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-not-exists
+        with:
+          path: non/existent-*.txt
+          match-method: glob
+          message: path should not exist
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-non-existent-glob-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent glob WHEN assert-path-not-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-not-exists
+        with:
+          path: non/existent-*.txt
+          match-method: glob
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
   test-existing-path-with-message:
     strategy:
       fail-fast: false
@@ -140,6 +191,57 @@ jobs:
         uses: ./assert-path-not-exists
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-existing-glob-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing glob, message='path should not exist' WHEN assert-path-not-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-not-exists
+        with:
+          path: .github/workflows/*.yml
+          match-method: glob
+          message: path should not exist
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-existing-glob-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing glob WHEN assert-path-not-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-not-exists
+        with:
+          path: .github/workflows/*.yml
+          match-method: glob
       - name: Assert step failure
         uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:

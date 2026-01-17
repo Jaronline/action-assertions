@@ -2,6 +2,13 @@ inputs:
   path:
     description: The path to check for existence.
     required: true
+  match-method:
+    description: The method to use for matching the path.
+    required: false
+    default: exact
+    options:
+      - exact
+      - glob
   message:
     description: An optional message to display on failure.
     type: string
