@@ -60,7 +60,7 @@ jobs:
           path: non-existent-path
           message: path should not exist
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -84,7 +84,7 @@ jobs:
         with:
           path: non-existent-path
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -113,7 +113,7 @@ jobs:
           path: ${{ needs.before-all.outputs.existing-file-path }}
           message: path should not exist
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -141,7 +141,7 @@ jobs:
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@ea06bdefa3dffc6edf944a442a9ad020650578c7 # v1
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
