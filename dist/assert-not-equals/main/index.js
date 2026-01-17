@@ -25909,7 +25909,7 @@ const assert_equals_1 = __nccwpck_require__(6527);
 const assert_not_equals_1 = __nccwpck_require__(9127);
 const assert_path_exists_1 = __nccwpck_require__(3850);
 const assert_path_not_exists_1 = __nccwpck_require__(7394);
-const paths_1 = __nccwpck_require__(8431);
+const path_matcher_1 = __nccwpck_require__(2842);
 function assertEquals(config, messageConfig) {
     const expected = config.expected();
     const actual = config.actual();
@@ -25928,15 +25928,17 @@ function assertNotEquals(config, messageConfig) {
 }
 async function assertPathExists(pathConfig, messageConfig) {
     const path = pathConfig.path();
+    const matchMethod = pathConfig.matchMethod();
     const message = messageConfig.message();
-    if (!(await (0, paths_1.pathExists)(path))) {
+    if (!(await (0, path_matcher_1.getMatcherFor)(matchMethod)(path))) {
         throw new assert_path_exists_1.AssertPathExistsError(path, message);
     }
 }
 async function assertPathNotExists(pathConfig, messageConfig) {
     const path = pathConfig.path();
+    const matchMethod = pathConfig.matchMethod();
     const message = messageConfig.message();
-    if (await (0, paths_1.pathExists)(path)) {
+    if (await (0, path_matcher_1.getMatcherFor)(matchMethod)(path)) {
         throw new assert_path_not_exists_1.AssertPathNotExistsError(path, message);
     }
 }
@@ -26042,10 +26044,19 @@ exports.getWorkspaceDirectory = getWorkspaceDirectory;
 exports.getActionId = getActionId;
 exports.setActionId = setActionId;
 const core = __importStar(__nccwpck_require__(7484));
+const match_method_1 = __nccwpck_require__(4459);
+const paths_1 = __nccwpck_require__(7803);
 const ACTION_ID_VAR = "JARONLINE_ACTION_ID";
 class PathConfig {
     path() {
         return core.getInput("path", { required: true });
+    }
+    matchMethod() {
+        const method = getOptionalInput("match-method", { trimWhitespace: true }) ?? "exact";
+        if (!(0, match_method_1.isMatchMethod)(method)) {
+            throw new paths_1.InvalidMatchMethodError(method);
+        }
+        return method;
     }
 }
 exports.PathConfig = PathConfig;
@@ -26254,7 +26265,47 @@ function handleMainActionError(error) {
 
 /***/ }),
 
-/***/ 8431:
+/***/ 7803:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.InvalidMatchMethodError = void 0;
+const match_method_1 = __nccwpck_require__(4459);
+const errors_1 = __nccwpck_require__(2600);
+class InvalidMatchMethodError extends errors_1.JobFailure {
+    constructor(method) {
+        super(`Invalid match-method: ${method}. Allowed values: ${Object.values(match_method_1.MatchMethod)
+            .map(m => `"${m}"`)
+            .join(", ")}.`);
+    }
+}
+exports.InvalidMatchMethodError = InvalidMatchMethodError;
+
+
+/***/ }),
+
+/***/ 4459:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MatchMethod = void 0;
+exports.isMatchMethod = isMatchMethod;
+exports.MatchMethod = {
+    EXACT: "exact",
+    GLOB: "glob",
+};
+function isMatchMethod(value) {
+    return Object.values(exports.MatchMethod).includes(value);
+}
+
+
+/***/ }),
+
+/***/ 2842:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -26293,9 +26344,21 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.pathExists = pathExists;
+exports.getMatcherFor = getMatcherFor;
 const core = __importStar(__nccwpck_require__(7484));
 const promises_1 = __nccwpck_require__(1943);
+const match_method_1 = __nccwpck_require__(4459);
+const errors_1 = __nccwpck_require__(2600);
+function getMatcherFor(matchMethod) {
+    switch (matchMethod) {
+        case match_method_1.MatchMethod.EXACT:
+            return pathExists;
+        case match_method_1.MatchMethod.GLOB:
+            return globExists;
+        default:
+            throw new errors_1.JobFailure(`Unknown match method: ${matchMethod}`);
+    }
+}
 async function pathExists(path) {
     try {
         await (0, promises_1.access)(path, promises_1.constants.F_OK);
@@ -26305,6 +26368,12 @@ async function pathExists(path) {
         core.debug(`Path does not exist: ${path}. Error: ${String(error)}`);
         return false;
     }
+}
+async function globExists(pattern) {
+    for await (const _ of (0, promises_1.glob)(pattern)) {
+        return true;
+    }
+    return false;
 }
 
 
