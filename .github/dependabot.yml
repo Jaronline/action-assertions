@@ -1,0 +1,26 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/sources"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm-security:
+        patterns:
+          - "*"
+        applies-to: "security-updates"
+
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+      - "/.github/actions/build-dist"
+      - "/.github/actions/init-integ-test"
+      - "/.github/actions/install-yarn-dependencies"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions-security:
+        patterns:
+          - "*"
+        applies-to: "security-updates"
