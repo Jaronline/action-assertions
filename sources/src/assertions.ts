@@ -5,7 +5,7 @@ import { AssertEqualsError } from "./errors/assert-equals";
 import { AssertNotEqualsError } from "./errors/assert-not-equals";
 import { AssertPathExistsError } from "./errors/assert-path-exists";
 import { AssertPathNotExistsError } from "./errors/assert-path-not-exists";
-import { pathExists } from "./paths";
+import { getMatcherFor } from "./paths/path-matcher";
 
 export function assertEquals(config: AssertEqualsConfig, messageConfig: MessageConfig) {
 	const expected = config.expected();
@@ -29,18 +29,20 @@ export function assertNotEquals(config: AssertNotEqualsConfig, messageConfig: Me
 
 export async function assertPathExists(pathConfig: PathConfig, messageConfig: MessageConfig) {
 	const path = pathConfig.path();
+	const matchMethod = pathConfig.matchMethod();
 	const message = messageConfig.message();
 
-	if (!(await pathExists(path))) {
+	if (!(await getMatcherFor(matchMethod)(path))) {
 		throw new AssertPathExistsError(path, message);
 	}
 }
 
 export async function assertPathNotExists(pathConfig: PathConfig, messageConfig: MessageConfig) {
 	const path = pathConfig.path();
+	const matchMethod = pathConfig.matchMethod();
 	const message = messageConfig.message();
 
-	if (await pathExists(path)) {
+	if (await getMatcherFor(matchMethod)(path)) {
 		throw new AssertPathNotExistsError(path, message);
 	}
 }

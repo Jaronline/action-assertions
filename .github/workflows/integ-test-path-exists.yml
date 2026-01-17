@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN existing file path, message='file not found' WHEN assert-file-exists THEN job is success"
+    name: "GIVEN existing file path, message='file not found' WHEN assert-path-exists THEN job is success"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -74,7 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN existing file path WHEN assert-file-exists THEN job is success"
+    name: "GIVEN existing file path WHEN assert-path-exists THEN job is success"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -102,7 +102,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN non-existent file path, message='file not found' WHEN assert-file-exists THEN job is failure"
+    name: "GIVEN non-existent file path, message='file not found' WHEN assert-path-exists THEN job is failure"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -127,7 +127,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ${{ fromJSON(inputs.runner-os) }}
-    name: "GIVEN non-existent file path WHEN assert-file-exists THEN job is failure"
+    name: "GIVEN non-existent file path WHEN assert-path-exists THEN job is failure"
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
@@ -140,6 +140,108 @@ jobs:
         uses: ./assert-path-exists
         with:
           path: non-existent-file
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-correct-glob-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing glob path, message='file not found' WHEN assert-path-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-exists
+        with:
+          path: .github/workflows/*.yml
+          match-method: glob
+          message: file not found
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-correct-glob-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN existing glob path WHEN assert-path-exists THEN job is success"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-exists
+        with:
+          path: .github/workflows/*.yml
+          match-method: glob
+      - name: Assert step success
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: success
+          actual: ${{ steps.act.outcome }}
+
+  test-incorrect-glob-with-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent glob path, message='file not found' WHEN assert-path-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-exists
+        with:
+          path: non/existent-*.txt
+          match-method: glob
+          message: file not found
+      - name: Assert step failure
+        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        with:
+          expected: failure
+          actual: ${{ steps.act.outcome }}
+
+  test-incorrect-glob-without-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.runner-os) }}
+    name: "GIVEN non-existent glob path WHEN assert-path-exists THEN job is failure"
+    runs-on: ${{ matrix.os }}
+    needs: before-all
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Initialize integration test
+        uses: ./.github/actions/init-integ-test
+      - name: Act
+        id: act
+        continue-on-error: true
+        uses: ./assert-path-exists
+        with:
+          path: non/existent-*.txt
+          match-method: glob
       - name: Assert step failure
         uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
         with:

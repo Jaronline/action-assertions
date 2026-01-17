@@ -1,10 +1,20 @@
 import * as core from "@actions/core";
+import { isMatchMethod, MatchMethod } from "../paths/match-method";
+import { InvalidMatchMethodError } from "../errors/paths";
 
 const ACTION_ID_VAR = "JARONLINE_ACTION_ID";
 
 export class PathConfig {
 	path(): string {
 		return core.getInput("path", { required: true });
+	}
+
+	matchMethod(): MatchMethod {
+		const method = getOptionalInput("match-method", { trimWhitespace: true }) ?? "exact";
+		if (!isMatchMethod(method)) {
+			throw new InvalidMatchMethodError(method);
+		}
+		return method;
 	}
 }
 
