@@ -22,7 +22,7 @@ jobs:
     outputs:
       existing-file-path: ${{ steps.create-temp-file.outputs.existing-file-path }}
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Create Temp File
@@ -49,7 +49,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Download Temp File
@@ -78,7 +78,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Download Temp File
@@ -106,7 +106,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
@@ -131,7 +131,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
@@ -155,7 +155,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
@@ -181,7 +181,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
@@ -206,7 +206,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
@@ -232,7 +232,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: before-all
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - name: Initialize integration test
         uses: ./.github/actions/init-integ-test
       - name: Act
