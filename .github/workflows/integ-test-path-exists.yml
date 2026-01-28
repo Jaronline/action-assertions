@@ -64,7 +64,7 @@ jobs:
           path: ${{ needs.before-all.outputs.existing-file-path }}
           message: file not found
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -92,7 +92,7 @@ jobs:
         with:
           path: ${{ needs.before-all.outputs.existing-file-path }}
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -117,7 +117,7 @@ jobs:
           path: non-existent-file
           message: file not found
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -141,7 +141,7 @@ jobs:
         with:
           path: non-existent-file
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -167,7 +167,7 @@ jobs:
           match-method: glob
           message: file not found
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -192,7 +192,7 @@ jobs:
           path: .github/workflows/*.yml
           match-method: glob
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -218,7 +218,7 @@ jobs:
           match-method: glob
           message: file not found
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -243,7 +243,7 @@ jobs:
           path: non/existent-*.txt
           match-method: glob
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
