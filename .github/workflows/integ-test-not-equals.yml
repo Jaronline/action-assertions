@@ -53,7 +53,7 @@ jobs:
           actual: ${{ matrix.value.actual }}
           message: Values are equal
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -94,7 +94,7 @@ jobs:
           unexpected: ${{ matrix.value.unexpected }}
           actual: ${{ matrix.value.actual }}
       - name: Assert step success
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: success
           actual: ${{ steps.act.outcome }}
@@ -132,7 +132,7 @@ jobs:
           actual: ${{ matrix.value.actual }}
           message: Values are equal
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
@@ -169,7 +169,7 @@ jobs:
           unexpected: ${{ matrix.value.unexpected }}
           actual: ${{ matrix.value.actual }}
       - name: Assert step failure
-        uses: jaronline/action-assertions/assert-equals@2bbd7385b4aa7b2882f4b269addf795832e505fd # v1
+        uses: jaronline/action-assertions/assert-equals@95d6eb160cf27b8beab013b5112b4adc971c37a5 # v1
         with:
           expected: failure
           actual: ${{ steps.act.outcome }}
