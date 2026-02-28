@@ -32,7 +32,7 @@ jobs:
           echo "This is a test file." > "$temp_file"
           echo "existing-file-path=$temp_file" >> $GITHUB_OUTPUT
       - name: Create Artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           path: ${{ steps.create-temp-file.outputs.existing-file-path }}
           name: temp-file-path-exists
